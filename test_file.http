@@ -2,5 +2,5 @@ POST http://localhost:5000/temperature
 Content-Type: application/json
 
 {
-    "Test": 1
+    "TEMPERATURE": 122
 }
