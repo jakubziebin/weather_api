@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from pydantic import BaseModel, Extra
+
+from datetime import date
 """Representation of all responses from api in object-oriented model. It is using also to validtion"""
 
 class PreconfiguredBaseModel(BaseModel):
@@ -12,13 +14,15 @@ class PreconfiguredBaseModel(BaseModel):
 class Temparature(PreconfiguredBaseModel):
     ID: int | None
     TEMPERATURE: float
-
+    DATE: date
 
 class Humidity(PreconfiguredBaseModel):
     ID: int | None 
     HUMIDITY: float
+    DATE: date
 
 
 class Particles(PreconfiguredBaseModel):
     ID: int | None
     PARTICLES: float
+    DATE: date

@@ -18,7 +18,7 @@ def temperature() -> dict[Any] | None:
     if request.method == 'POST':
         """input data must be in json format: {'TEMPERATURE': value}, id will be given automatically"""
         connection = connect_to_db()
-        cursor = connection.cursor()
+        cursor = connection.cursor() 
         request_data = request.get_json()
 
         try:
