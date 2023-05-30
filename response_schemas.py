@@ -14,15 +14,15 @@ class PreconfiguredBaseModel(BaseModel):
 class Temparature(PreconfiguredBaseModel):
     ID: int | None
     TEMPERATURE: float
-    DATE: date
+    DATE: date | None
 
 class Humidity(PreconfiguredBaseModel):
     ID: int | None 
     HUMIDITY: float
-    DATE: date
+    DATE: date | None
 
 
 class Particles(PreconfiguredBaseModel):
     ID: int | None
     PARTICLES: float
-    DATE: date
+    DATE: date | None

@@ -1,6 +1,6 @@
-POST http://localhost:5000/temperature
+POST http://localhost:5000/particles
 Content-Type: application/json
 
 {
-    "TEMPERATURE": 321
+    "PARTICLES": 321
 }

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any
+from datetime import datetime
 
 from flask import Flask
 from flask import jsonify
@@ -16,29 +17,32 @@ app = Flask(__name__)
 @app.route('/temperature', methods=['GET', 'POST'])
 def temperature() -> dict[Any] | None:
     if request.method == 'POST':
-        """input data must be in json format: {'TEMPERATURE': value}, id will be given automatically"""
+        """input data must be in json format: {'TEMPERATURE': value}, id and date will be given automatically"""
         connection = connect_to_db()
         cursor = connection.cursor() 
         request_data = request.get_json()
+        date_to_db = datetime.today().strftime('%Y-%m-%d')
 
+        request_data["DATE"] = date_to_db
+        
         try:
             Temparature(**request_data)
         except ValidationError as error:
-            raise ValidationError("Something is wrong with this parameters !") from error
+            raise ValidationError("Something is wrong with this parameters from arduino!") from error
         
-        query = "INSERT INTO TEMPERATURE(TEMPERATURE) VALUES(%(TEMPERATURE)s)"
+        query = "INSERT INTO TEMPERATURE(TEMPERATURE, DATE) VALUES(%(TEMPERATURE)s, %(DATE)s)"
         cursor.execute(query, request_data)
         connection.commit()
 
         connection.close()
         return "done", 201
     else:
-        """Value return from database should look like this: {'ID': id, 'TEMPERATURE': value}"""
+        """Value return from database should look like this: {'ID': id, 'TEMPERATURE': value, 'DATE': requested_date}"""
         connection = connect_to_db()
         cursor = connection.cursor(dictionary=True)
         request_data = request.get_json()
         
-        query = "SELECT ID, TEMPERATURE FROM TEMPERATURE WHERE ID = %(ID)s"
+        query = "SELECT * FROM TEMPERATURE WHERE ID = %(ID)s AND DATE = %(DATE)s"
         cursor.execute(query, request_data)
         result = cursor.fetchone()
 
@@ -53,29 +57,32 @@ def temperature() -> dict[Any] | None:
 @app.route('/humidity', methods=['GET', 'POST'])
 def humidity() -> dict[Any] | None:
     if request.method == 'POST':
-        """input data must be in json format: {'HUMIDITY': value}, id will be given automatically"""
+        """input data must be in json format: {'HUMIDITY': value}, id and date will be given automatically"""
         connection = connect_to_db()
         cursor = connection.cursor()
-        request_data = request.get_json()
+        request_date = request.get_json()
+        date_to_db = datetime.today().strftime('%Y-%m-%d')
+
+        request_date["DATE"] = date_to_db
 
         try:
-            Humidity(**request_data)
+            Humidity(**request_date)
         except ValidationError as error:
             raise ValidationError("Something is wrong with this parameters !") from error
         
-        query = "INSERT INTO HUMIDITY(HUMIDITY) VALUES(%(HUMIDITY)s)"
-        cursor.execute(query, request_data)
+        query = "INSERT INTO HUMIDITY(HUMIDITY, DATE) VALUES(%(HUMIDITY)s, %(DATE)s)"
+        cursor.execute(query, request_date)
         connection.commit()
 
         connection.close()
         return "done", 201
     else:
-        """Value return from database should look like this: {'ID': id, 'HUMIDITY': value}"""
+        """Value return from database should look like this: {'ID': id, 'HUMIDITY': value, 'DATE': requested_date}"""
         connection = connect_to_db()
         cursor = connection.cursor(dictionary=True)
         request_data = request.get_json()
         
-        query = "SELECT ID, HUMIDITY FROM HUMIDITY WHERE ID = %(ID)s"
+        query = "SELECT * FROM HUMIDITY WHERE ID = %(ID)s AND DATE = %(DATE)s"
         cursor.execute(query, request_data)
         result = cursor.fetchone()
 
@@ -90,29 +97,32 @@ def humidity() -> dict[Any] | None:
 @app.route('/particles', methods=['GET', 'POST'])
 def particles() -> dict[Any] | None:
     if request.method == 'POST':
-        """input data must be in json format: {'PARTICLES': value}, id will be given automatically"""
+        """input data must be in json format: {'PARTICLES': value}, id and date will be given automatically"""
         connection = connect_to_db()
         cursor = connection.cursor()
         request_data = request.get_json()
+        date_to_db = datetime.today().strftime('%Y-%m-%d')
+
+        request_data["DATE"] = date_to_db
 
         try:
             Particles(**request_data)
         except ValidationError as error:
             raise ValidationError("Something is wrong with this parameters !") from error
         
-        query = "INSERT INTO PARTICLES(PARTICLES) VALUES(%(PARTICLES)s)"
+        query = "INSERT INTO PARTICLES(PARTICLES, DATE) VALUES(%(PARTICLES)s, %(DATE)s)"
         cursor.execute(query, request_data)
         connection.commit()
 
         connection.close()
         return "done", 201
     else:
-        """Value return from database should look like this: {'ID': id, 'PARTICLES': value}"""
+        """Value return from database should look like this: {'ID': id, 'PARTICLES': value, 'DATE': requested_date}"""
         connection = connect_to_db()
         cursor = connection.cursor(dictionary=True)
         request_data = request.get_json()
         
-        query = "SELECT ID, PARTICLES FROM PARTICLES WHERE ID = %(ID)s"
+        query = "SELECT * FROM PARTICLES WHERE ID = %(ID)s AND DATE = %(DATE)s"
         cursor.execute(query, request_data)
         result = cursor.fetchone()
 
