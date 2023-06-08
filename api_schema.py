@@ -6,6 +6,8 @@ from datetime import datetime
 from flask import Flask
 from flask import jsonify
 from flask import request
+import serial
+import requests
 from pydantic import ValidationError
 
 from connect_db import connect_to_db
@@ -75,7 +77,7 @@ def humidity() -> dict[Any] | None:
         connection.commit()
 
         connection.close()
-        return "done", 201
+        return request_date
     else:
         """Value return from database should look like this: {'ID': id, 'HUMIDITY': value, 'DATE': requested_date}"""
         connection = connect_to_db()
@@ -135,5 +137,4 @@ def particles() -> dict[Any] | None:
 
 
 if __name__ == "__main__":
-    app.debug = True
-    app.run()
+        app.run()
